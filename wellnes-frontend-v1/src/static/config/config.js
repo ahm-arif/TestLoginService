@@ -1,20 +1,8 @@
-module.exports = {
-    db: {
-        user: 'postgres',
-        host: 'localhost',
-        database: 'wellnes_web',
-        password: 'password',
-        port: 5432,
-    },
-    port: {
-        server: 8790,
+export const API_BASE_URL = 'http://localhost:8080';
+export const ACCESS_TOKEN = 'accessToken';
 
-    },
-    // url: 'http://13.251.179.27', //change to the corresponding when deploying,
-    url: 'http://localhost:8080', //change to the corresponding when deploying,
-    token: {
-        key: 'USER_KEY',
-    },
+export const OAUTH2_REDIRECT_URI = 'http://localhost:8081/oauth2/redirect'
 
+export const GOOGLE_AUTH_URL = API_BASE_URL + '/oauth2/authorize/google?redirect_uri=' + OAUTH2_REDIRECT_URI;
 
-}
+// http://localhost:8080/oauth2/authorize/google

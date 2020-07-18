@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dev.wellness.models.ERole;
 import com.dev.wellness.models.Role;
 import com.dev.wellness.models.User;
+import com.dev.wellness.models.AuthProvider;
 import com.dev.wellness.payload.request.LoginRequest;
 import com.dev.wellness.payload.request.SignupRequest;
 import com.dev.wellness.payload.response.JwtResponse;
@@ -91,6 +92,8 @@ public class AuthController {
 							 signUpRequest.getEmail(),
 							 encoder.encode(signUpRequest.getPassword()));
 
+		user.setProvider(AuthProvider.local);
+
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 
@@ -105,7 +108,6 @@ public class AuthController {
 					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 					roles.add(adminRole);
-
 					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)

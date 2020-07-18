@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import './static/styles/App.css';
 
+
 import AuthService from "./services/auth.service";
+import OAuth2RedirectHandler from './services/OAuth2RedirectHandler';
 
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -11,6 +13,7 @@ import Home from "./components/Homepage";
 import Profile from "./components/Profile";
 import BoardUser from "./components/User";
 import BoardAdmin from "./components/AdminPage";
+import { ACCESS_TOKEN } from './static/config/config';
 
 class App extends Component {
   constructor(props) {
@@ -19,6 +22,7 @@ class App extends Component {
 
     this.state = {
       showAdminBoard: false,
+      authenticated:false,
       currentUser: undefined
     };
   }
@@ -29,13 +33,14 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
+        authenticated:true,
         showAdminBoard: user.roles.includes("ROLE_ADMIN")
       });
     }
   }
 
   logOut() {
-    AuthService.logout();
+    AuthService.logout(this.state.authenticated);
   }
 
   render() {
@@ -110,6 +115,7 @@ class App extends Component {
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
               <Route path="/admin" component={BoardAdmin} />
+              <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>  
             </Switch>
           </div>
         </div>

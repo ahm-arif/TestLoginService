@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import googleLogo from '../../img/google-logo.png';
+import { GOOGLE_AUTH_URL, ACCESS_TOKEN } from '../../static/config/config';
 
 import AuthService from "../../services/auth.service";
 
@@ -14,7 +16,19 @@ const required = value => {
     );
   }
 };
-
+class SocialLogin extends Component {
+  render() {
+      return (
+          <div className="social-login">
+            <a
+                className="btn btn-outline-primary btn-block" href={GOOGLE_AUTH_URL}>
+                  <img src={googleLogo} width="20px" height="20px" alt="Google" /> 
+                  Log in with Google
+              </a>
+          </div>
+      );
+  }
+}
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -95,7 +109,9 @@ export default class Login extends Component {
               this.form = c;
             }}
           >
+
             <div className="form-group">
+              
               <label htmlFor="username">Username</label>
               <Input
                 type="text"
@@ -145,8 +161,13 @@ export default class Login extends Component {
               }}
             />
           </Form>
+          
+          <div className="form-group">
+            <SocialLogin />
+          </div>
         </div>
       </div>
     );
   }
+
 }

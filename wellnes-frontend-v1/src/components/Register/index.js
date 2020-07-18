@@ -3,7 +3,8 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
-
+import googleLogo from '../../img/google-logo.png';
+import { GOOGLE_AUTH_URL, ACCESS_TOKEN } from '../../static/config/config';
 import AuthService from "../../services/auth.service";
 
 const required = value => {
@@ -15,6 +16,7 @@ const required = value => {
     );
   }
 };
+
 
 const email = value => {
   if (!isEmail(value)) {
@@ -56,6 +58,19 @@ const vrole = value => {
   }
 };
 
+class SocialSignup extends Component {
+  render() {
+      return (
+          <div className="social-signup">
+            <a
+                className="btn btn-outline-primary btn-block" href={GOOGLE_AUTH_URL}>
+                  <img src={googleLogo} width="20px" height="20px" alt="Google" /> 
+                  Sign Up with Google
+              </a>
+          </div>
+      );
+  }
+}
 export default class Register extends Component {
   constructor(props) {
     super(props);
@@ -205,9 +220,11 @@ export default class Register extends Component {
                   />
                 </div>
 
+
                 <div className="form-group">
                   <button className="btn btn-primary btn-block">Sign Up</button>
                 </div>
+
               </div>
             )}
 
@@ -232,6 +249,10 @@ export default class Register extends Component {
               }}
             />
           </Form>
+
+          <div className="form-group">
+                  <SocialSignup />
+                </div>
         </div>
       </div>
     );

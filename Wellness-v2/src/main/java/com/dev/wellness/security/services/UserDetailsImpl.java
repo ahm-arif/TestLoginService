@@ -2,17 +2,19 @@ package com.dev.wellness.security.services;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.dev.wellness.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements OAuth2User, UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
@@ -20,7 +22,8 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 
 	private String email;
-
+	
+ 	private Map<String, Object> attributes;
 	@JsonIgnore
 	private String password;
 
@@ -47,6 +50,12 @@ public class UserDetailsImpl implements UserDetails {
 				user.getPassword(), 
 				authorities);
 	}
+
+    public static UserDetailsImpl create(User user, Map<String, Object> attributes) {
+        UserDetailsImpl userPrincipal = UserDetailsImpl.build(user);
+        userPrincipal.setAttributes(attributes);
+        return userPrincipal;
+    }
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -100,4 +109,17 @@ public class UserDetailsImpl implements UserDetails {
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(id, user.id);
 	}
+	@Override
+	public Map<String, Object> getAttributes() {
+	return attributes;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+	this.attributes = attributes;
+	}
+	
+	@Override
+    public String getName() {
+        return String.valueOf(id);
+    }
 }

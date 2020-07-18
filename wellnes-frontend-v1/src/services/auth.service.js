@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE_URL } from "../static/config/config";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = API_BASE_URL+"/api/auth/";
 
 class AuthService {
   login(username, password) {
@@ -20,6 +21,11 @@ class AuthService {
 
   logout() {
     localStorage.removeItem("user");
+    this.setState({
+      authenticated: false,
+      currentUser: null
+    });
+    //Alert.success("You're safely logged out!");
   }
 
   register(username, email, password,roles) {
