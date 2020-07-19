@@ -3,7 +3,10 @@ package com.dev.wellness.security.oauth2;
 import com.dev.wellness.exception.OAuth2AuthenticationProcessingException;
 import com.dev.wellness.models.AuthProvider;
 import com.dev.wellness.models.User;
+import com.dev.wellness.models.Role;
+import com.dev.wellness.models.ERole;
 import com.dev.wellness.repository.UserRepository;
+import com.dev.wellness.repository.RoleRepository;
 import com.dev.wellness.security.services.UserDetailsImpl;
 import com.dev.wellness.security.oauth2.user.OAuth2UserInfo;
 import com.dev.wellness.security.oauth2.user.OAuth2UserInfoFactory;
@@ -17,6 +20,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Optional;
 
 @Service
@@ -24,6 +29,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+	RoleRepository roleRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -59,17 +67,28 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return UserDetailsImpl.create(user, oAuth2User.getAttributes());
+        // return UserDetailsImpl.create(user, oAuth2User.getAttributes());
+        return UserDetailsImpl.createUserAuth2(user, oAuth2User.getAttributes());
     }
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+        
         User user = new User();
+
+
+		Set<Role> roles = new HashSet<>();
+
+
+        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(adminRole);
 
         user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
         user.setProviderId(oAuth2UserInfo.getId());
         user.setUsername(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 

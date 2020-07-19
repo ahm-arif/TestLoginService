@@ -1,6 +1,7 @@
 package com.dev.wellness.security.services;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.dev.wellness.models.User;
+import com.dev.wellness.models.ERole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements OAuth2User, UserDetails {
@@ -37,21 +39,37 @@ public class UserDetailsImpl implements OAuth2User, UserDetails {
 		this.password = password;
 		this.authorities = authorities;
 	}
+	//for social login
 
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
 				.collect(Collectors.toList());
-
-		return new UserDetailsImpl(
-				user.getId(), 
-				user.getUsername(), 
-				user.getEmail(),
-				user.getPassword(), 
-				authorities);
+			return new UserDetailsImpl(
+					user.getId(), 
+					user.getUsername(), 
+					user.getEmail(),
+					user.getPassword(), 
+					authorities);
 	}
 
-    public static UserDetailsImpl create(User user, Map<String, Object> attributes) {
+	public static UserDetailsImpl create(User user) {
+		List<GrantedAuthority> authorities = user.getRoles().stream()
+		.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+		.collect(Collectors.toList());
+		// List<GrantedAuthority> authorities = Collections.
+		// 		singletonList(new SimpleGrantedAuthority("admin"));
+
+		return new UserDetailsImpl(
+				user.getId(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getPassword(),
+				authorities
+		);
+    }
+
+    public static UserDetailsImpl createUserAuth2(User user, Map<String, Object> attributes) {
         UserDetailsImpl userPrincipal = UserDetailsImpl.build(user);
         userPrincipal.setAttributes(attributes);
         return userPrincipal;
