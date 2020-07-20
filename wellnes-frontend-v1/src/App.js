@@ -115,7 +115,7 @@ class App extends Component {
               <Route exact path="/profile" component={Profile} />
               <Route path="/user" component={BoardUser} />
               <Route path="/admin" component={BoardAdmin} />
-              <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>  
+              {/* <Route path="/oauth2/redirect" component={OAuth2RedirectHandler}></Route>   */}
             </Switch>
           </div>
         </div>

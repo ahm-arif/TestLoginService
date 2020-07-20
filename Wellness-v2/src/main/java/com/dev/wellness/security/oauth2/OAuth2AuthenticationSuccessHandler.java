@@ -19,6 +19,17 @@ import java.util.Optional;
 
 import static com.dev.wellness.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
+import com.dev.wellness.security.services.UserDetailsServiceImpl;
+import org.springframework.security.core.userdetails.UserDetails;
+import com.dev.wellness.security.services.UserDetailsImpl;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import com.dev.wellness.payload.response.JwtResponse;
+
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
@@ -29,6 +40,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
 
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
     @Autowired
     OAuth2AuthenticationSuccessHandler(JwtUtils tokenProvider, AppProperties appProperties,
                                        HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
@@ -56,17 +69,34 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
 
 
-        if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-            throw new BadRequestException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication "+ redirectUri.get());
-        }
+
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         // String token = tokenProvider.createToken(authentication);
 
         String token = tokenProvider.generateJwtToken(authentication);
 
+        Long userId = tokenProvider.getUserIdFromToken(token);
+        //UserDetails userDetails = userDetailsService.loadUserById(userId);
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();	
+        	
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+        // if(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
+        //     throw new BadRequestException(userDetail.getEmail()+ roles+ userDetails.getId()+ "error " + userDetails.getUsername()+ redirectUri.get() + redirectUri.isPresent() + " " + targetUrl + " " + token + " " + userDetails + "  " + String.valueOf(userId));
+        // }
+
+
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
+                .queryParam("jwt", new JwtResponse(token, 
+												 userDetails.getId(), 
+												 userDetails.getUsername(), 
+												 userDetails.getEmail(), 
+												 roles))
+                
                 .build().toUriString();
     }
 

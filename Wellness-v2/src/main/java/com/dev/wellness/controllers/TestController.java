@@ -27,4 +27,11 @@ public class TestController {
 	public String adminAccess() {
 		return "Admin Board.";
 	}
+
+	// @GetMapping("/user/me")
+    // @PreAuthorize("hasRole('ADMIN')")
+    // public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+    //     return userRepository.findById(userPrincipal.getId())
+    //             .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+    // }
 }

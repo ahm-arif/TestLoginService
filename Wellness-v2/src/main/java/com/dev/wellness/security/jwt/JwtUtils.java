@@ -17,10 +17,10 @@ import io.jsonwebtoken.*;
 public class JwtUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-	@Value("${dev.app.jwtSecret}")
+	@Value("${dev.app.auth.jwtSecret}")
 	private String jwtSecret;
 
-	@Value("${dev.app.jwtExpirationMs}")
+	@Value("${dev.app.auth.jwtExpirationMs}")
 	private int jwtExpirationMs;
 
 
@@ -31,33 +31,19 @@ public class JwtUtils {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		return Jwts.builder()
-				.setSubject((userPrincipal.getUsername()))
-				// .setSubject(Long.toString(userPrincipal.getId()))
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret)
-				.compact();
-	}
-	
-	// SOCIAL LOGIN
-	// # BEGIN
-	public String createToken(Authentication authentication) {
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
-		Date now = new Date();
-		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
-
-		return Jwts.builder()
+				// .setSubject((userPrincipal.getUsername()))
 				.setSubject(Long.toString(userPrincipal.getId()))
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
-    }
+	}
+
+
 
 	public Long getUserIdFromToken(String token) {
 		Claims claims = Jwts.parser()
-				.setSigningKey(appProperties.getAuth().getTokenSecret())
+				.setSigningKey(jwtSecret)
 				.parseClaimsJws(token)
 				.getBody();
 

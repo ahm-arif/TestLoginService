@@ -1,7 +1,9 @@
 import axios from "axios";
-import { API_BASE_URL } from "../static/config/config";
+import { API_BASE_URL ,ACCESS_TOKEN} from "../static/config/config";
 
 const API_URL = API_BASE_URL+"/api/auth/";
+
+
 
 class AuthService {
   login(username, password) {
@@ -13,6 +15,7 @@ class AuthService {
       .then(response => {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
+          
         }
 
         return response.data;
@@ -21,6 +24,7 @@ class AuthService {
 
   logout() {
     localStorage.removeItem("user");
+    localStorage.removeItem(ACCESS_TOKEN);
     this.setState({
       authenticated: false,
       currentUser: null
@@ -42,8 +46,12 @@ class AuthService {
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem('user'));;
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user){
+      return user;
   }
+}
+
 }
 
 export default new AuthService();

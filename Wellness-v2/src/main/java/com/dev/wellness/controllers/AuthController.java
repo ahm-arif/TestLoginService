@@ -33,6 +33,10 @@ import com.dev.wellness.repository.UserRepository;
 import com.dev.wellness.security.jwt.JwtUtils;
 import com.dev.wellness.security.services.UserDetailsImpl;
 
+import javax.validation.Valid;
+import java.net.URI;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -120,7 +124,11 @@ public class AuthController {
 
 		user.setRoles(roles);
 		userRepository.save(user);
-
+		// URI location = ServletUriComponentsBuilder
+		// .fromCurrentContextPath().path("/user/me")
+		// .buildAndExpand(result.getId()).toUri();
+		// return ResponseEntity.created(location)
+        //         .body(new ApiResponse(true, "User registered successfully@"));
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
 }
