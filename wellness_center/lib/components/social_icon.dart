@@ -14,6 +14,7 @@ class SocalIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
+      //splashColor: Colors.grey,
       onTap: press,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 10),

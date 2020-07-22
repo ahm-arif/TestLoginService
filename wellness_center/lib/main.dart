@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wellness_center/Screens/Login/login_screen.dart';
 import 'package:wellness_center/constants.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() => runApp(MyApp());
 
