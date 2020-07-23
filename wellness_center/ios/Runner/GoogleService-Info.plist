@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>617130004496-nqbfidku6pmnedb7ik5m4uslaijah8qq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.617130004496-nqbfidku6pmnedb7ik5m4uslaijah8qq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB3mccB7AcnkEpDZytUojHwYqwR0RSNiE0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>617130004496</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.wellnessCenter</string>
+	<key>PROJECT_ID</key>
+	<string>wellness-center-ec130</string>
+	<key>STORAGE_BUCKET</key>
+	<string>wellness-center-ec130.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:617130004496:ios:aabe63ec8552cb27dcfa95</string>
+	<key>DATABASE_URL</key>
+	<string>https://wellness-center-ec130.firebaseio.com</string>
+</dict>
+</plist>
