@@ -17,12 +17,12 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert' show json;
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  scopes: <String>[
-    'email',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ],
-);
+// GoogleSignIn _googleSignIn = GoogleSignIn(
+//   scopes: <String>[
+//     'email',
+//     'https://www.googleapis.com/auth/contacts.readonly',
+//   ],
+// );
 
 
 class Body extends StatefulWidget {
@@ -34,8 +34,8 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body>{
-  GoogleSignInAccount _currentUser;
-  String _contactText;
+  // GoogleSignInAccount _currentUser;
+  // String _contactText;
 
   // @override
   // void initState() {
@@ -48,66 +48,77 @@ class _Body extends State<Body>{
   //       _handleGetContact();
   //     }
   //   });
+  //   print(_currentUser);
   //  // _googleSignIn.signInSilently();
   // }
 
-  Future<void> _handleGetContact() async {
-    setState(() {
-      _contactText = "Loading contact info...";
-    });
-    final http.Response response = await http.get(
-      'https://people.googleapis.com/v1/people/me/connections'
-      '?requestMask.includeField=person.names',
-      headers: await _currentUser.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = "People API gave a ${response.statusCode} "
-            "response. Check logs for details.";
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data = json.decode(response.body);
-    final String namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = "I see you know $namedContact!";
-      } else {
-        _contactText = "No contacts to display.";
-      }
-    });
-  }
+  // Future<void> _handleGetContact() async {
+  //   setState(() {
+  //     _contactText = "Loading contact info...";
+  //   });
+  //   final http.Response response = await http.get(
+  //     'https://people.googleapis.com/v1/people/me/connections'
+  //     '?requestMask.includeField=person.names',
+  //     headers: await _currentUser.authHeaders,
+  //   );
+  //   if (response.statusCode != 200) {
+  //     setState(() {
+  //       _contactText = "People API gave a ${response.statusCode} "
+  //           "response. Check logs for details.";
+  //     });
+  //     print('People API ${response.statusCode} response: ${response.body}');
+  //     return;
+  //   }
+  //   final Map<String, dynamic> data = json.decode(response.body);
+  //   final String namedContact = _pickFirstNamedContact(data);
+  //   setState(() {
+  //     if (namedContact != null) {
+  //       _contactText = "I see you know $namedContact!";
+  //     } else {
+  //       _contactText = "No contacts to display.";
+  //     }
+  //   });
+  // }
 
-  String _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic> connections = data['connections'];
-    final Map<String, dynamic> contact = connections?.firstWhere(
-      (dynamic contact) => contact['names'] != null,
-      orElse: () => null,
-    );
-    if (contact != null) {
-      final Map<String, dynamic> name = contact['names'].firstWhere(
-        (dynamic name) => name['displayName'] != null,
-        orElse: () => null,
-      );
-      if (name != null) {
-        return name['displayName'];
-      }
-    }
-    return null;
-  }
+  // String _pickFirstNamedContact(Map<String, dynamic> data) {
+  //   final List<dynamic> connections = data['connections'];
+  //   final Map<String, dynamic> contact = connections?.firstWhere(
+  //     (dynamic contact) => contact['names'] != null,
+  //     orElse: () => null,
+  //   );
+  //   if (contact != null) {
+  //     final Map<String, dynamic> name = contact['names'].firstWhere(
+  //       (dynamic name) => name['displayName'] != null,
+  //       orElse: () => null,
+  //     );
+  //     if (name != null) {
+  //       return name['displayName'];
+  //     }
+  //   }
+  //   return null;
+  // }
 
-  Future<void> _handleSignIn() async {
-    print('hmmm');
-    try {
-      await _googleSignIn.signIn();
-      print('yeyaaa');
-    } catch (error) {
-      print(error);
-    }
-  }
+  // Future<void> _handleSignIn() async {
+  //   print('hmmm');
+  //   try {
+  //     _googleSignIn.signIn().then((GoogleSignInAccount acc) async {
+  //       GoogleSignInAuthentication auth = await acc.authentication;
+  //       print(acc.id);
+  //       print(acc.email);
+  //       print(acc.displayName);
+  //       print(acc.photoUrl);
+  //       acc.authentication.then((GoogleSignInAuthentication auth) async {
+  //         print(auth.idToken);
+  //         print(auth.accessToken);
+  //       });
+  //     });
+      
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+  // Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
  @override
   Widget build(BuildContext context) {
@@ -188,7 +199,7 @@ class _Body extends State<Body>{
                                         onChanged: (value) {},
                                       ),
                                       RoundedButton(
-                                        text: "SIGN INn",
+                                        text: "SIGN IN",
                                         press: () {
                                               //login();
                                         },
@@ -199,25 +210,22 @@ class _Body extends State<Body>{
                                             SocalIcon(
                                               iconSrc: "assets/icons/facebook.svg",
                                               press: () {
-                                                      signInWithGoogle().whenComplete(() {
+                                                      // still need to set up the id in fb
+                                                    },
+                                            ),
+                                            SocalIcon(
+                                              iconSrc: "assets/icons/google-plus.svg",
+                                              press: () {
+                                                signInWithGoogle().whenComplete(() {
                                                         Navigator.of(context).push(
                                                           MaterialPageRoute(
                                                             builder: (context) {
                                                               return HomeScreen();
+                               
                                                             },
                                                           ),
                                                         );
-                                                      });
-                                                    },
-                                            ),
-                                             //const Text("g"),
-                                              // RaisedButton(
-                                              //   child: const Text('google'),
-                                              //   onPressed: _handleSignIn,
-                                              // ),
-                                            SocalIcon(
-                                              iconSrc: "assets/icons/google-plus.svg",
-                                              press: () {_handleSignIn();},
+                                                      });},
                                             ),
                                           ],
                                         ),

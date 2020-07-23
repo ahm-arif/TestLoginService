@@ -51,6 +51,7 @@ String imageUrl;
 
 
 Future<String> signInWithGoogle() async {
+  print('starting...');
   final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
   final GoogleSignInAuthentication googleSignInAuthentication =
       await googleSignInAccount.authentication;
