@@ -5,15 +5,17 @@ import 'package:wellness_center/constants.dart';
 class NoBorderInputField extends StatelessWidget {
   final String hintText;
   final IconData icon;
-  final ValueChanged<String> onChanged;
-  // final validator;
+  final ValueChanged<String> onSaved;
+  final validator;
+  final obscureText;
   // final onSaved;
   const NoBorderInputField({
     Key key,
     this.hintText,
     this.icon,
-    this.onChanged,
-    // this.validator,
+    this.onSaved,
+    this.validator,
+    this.obscureText=false,
     // this.onSaved
   }) : super(key: key);
 
@@ -21,8 +23,9 @@ class NoBorderInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldNoContainer(
       child: TextFormField(
-        onChanged: onChanged,
-        // validator: validator,
+        onSaved: onSaved,
+        validator: validator,
+        obscureText: obscureText,
         // onSaved: onSaved,
         cursorColor: blueColor,
         decoration: InputDecoration(

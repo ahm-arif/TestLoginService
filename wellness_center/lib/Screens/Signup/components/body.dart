@@ -57,27 +57,27 @@ class Body extends StatelessWidget {
                                       SizedBox(height: size.height * 0.005),
                                       NoBorderInputField(
                                         hintText: "First Name",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),
                                       NoBorderInputField(
                                         hintText: "Last Name",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),
                                       NoBorderInputField(
                                         hintText: "Date of Birth",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),
                                       NoBorderInputField(
                                         hintText: "Address",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),
                                       NoBorderInputField(
                                         hintText: "Phone number",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),
                                       NoBorderInputField(
                                         hintText: "E-mail",
-                                        onChanged: (value) {},
+                                        onSaved: (value) {},
                                       ),                                    
                                       RoundedButton(
                                         text: "CREATE ACCOUNT",

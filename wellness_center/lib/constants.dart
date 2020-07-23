@@ -13,4 +13,7 @@ const wellness ="Wellness Center";
 // grey : #
 
 //server contants
-const API_URL = "";
+const API_BASE_URL = 'http://localhost:8080';
+const API_AUTH_URL = API_BASE_URL+"/api/auth/";
+const SIGN_IN_URL = API_AUTH_URL +"signin";
+const SIGN_UP_URL = API_AUTH_URL +"signup";

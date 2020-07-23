@@ -1,30 +1,47 @@
 class Validation {
-  
   String validatePassword(String value) { 
-    if (value.length < 4) { 
-      return 'Password Minimal 4 Karakter'; 
+    
+      // Pattern pattern =
+      // r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
+      // RegExp regex = new RegExp(pattern);
+       if (value.isEmpty) {
+        return "Field tidak boleh kosong";}
+      // } else if (!regex.hasMatch(value)){
+      //   return 'Invalid password';
+      // }
+      else
+        return null;
     }
-    return null; 
-  }
 
   String validateEmail(String value) {
-    if (!value.contains('@')) {
-      return 'Email tidak valid'; 
-    }
-    return null;
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Email tidak valid';
+    else
+      return null;
   }
 
   String validateName(String value) {
-    if (value.isEmpty) { 
-      return 'Nama Lengkap Harus Diisi'; 
-    }
-    return null;
+      Pattern pattern =
+          r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+      RegExp regex = new RegExp(pattern);
+      if (value.isEmpty) {
+        return "Field tidak boleh kosong";
+      } else if (!regex.hasMatch(value)){
+        return 'Invalid username';
+      }
+      else
+        return null;
   }
 
   String validateInput(String value){
-    if (value.isEmpty){
-      return 'Harap dilengkapi';
-    }
-    return null;
+    // String patttern = r'(^[a-zA-Z ]*$)';
+    //   RegExp regExp = new RegExp(patttern);
+      if (value.isEmpty) {
+        return "Field tidak boleh kosong";
+      } 
+      return null;
   }
 }
