@@ -14,9 +14,16 @@ import 'package:wellness_center/src/utils/validation.dart';
 
 import 'package:wellness_center/src/utils/sso_google.dart';
 import 'package:wellness_center/src/networks/api.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert' show json, base64, ascii;
+import 'package:wellness_center/src/utils/secure_storage.dart';
+
+
+
+ApiService apiService;
+String token;
+
+
 //import 'package:wellness_center/src/utils/validation.dart';
 
 // GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -46,28 +53,53 @@ class Body extends StatefulWidget {
   }) : super(key: key);
 }
 
-class _Body extends State<Body> with Validation{
+class _Body extends State<Body> with Validation,SecureStoreMixin{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool autoValidate = false;
-
-  String _name;
-  String _password;
-
+  
+  String username;
+  String password;
+  @override
+  void initState() {
+    super.initState();
+    apiService = ApiService();
+    signOutGoogle();
+  }
   void _validateInputs() async {
     if (_formKey.currentState.validate()) {
   //    If all data are correct then save data to out variables
-    var jwt = await attemptLogIn(_name, _password);
-      if(jwt != null) {
-        storage.write(key: "jwt", value: jwt);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen()
-          )
-        );
-  } else {
-    displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
-  }
+    _formKey.currentState.save();
+
+    try {
+     
+    final _futureUser = apiService.loginUser(username,password);
+    _futureUser.then((data) async  {
+        if(data!= null) {
+         // print(data.email);
+          // setSecureStore('username', data.username);
+          // setSecureStore('email', data.email);
+          //
+          await storage.write(key: 'username', value: data.username);
+          await storage.write(key: 'email', value: data.email);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen()
+              )
+            );
+          } else {
+            displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
+          } 
+   
+    }, onError: (e) {
+        print(e);
+      });
+    //  var t ='a';
+
+    }catch(error){
+        
+    }
 
     } else {
   //    If all data are not valid then start auto validation.
@@ -140,7 +172,7 @@ class _Body extends State<Body> with Validation{
                                           validator: validateName,
                                           onSaved: (value) 
                                           {
-                                            _name = value;
+                                            username = value;
                                           },
                                           //obscureText: false,
 
@@ -151,7 +183,7 @@ class _Body extends State<Body> with Validation{
                                           validator: validatePassword,
                                           onSaved: (value) 
                                           {
-                                            _password = value;
+                                            password = value;
                                           },
                                           obscureText: true,
 

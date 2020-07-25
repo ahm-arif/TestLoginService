@@ -1,21 +1,66 @@
+
+
+import 'dart:convert';
+
 class User {
-  String _username;
-  String _password;
-  User(this._username, this._password);
+  int id;
+  String username;
+  String jwtToken;
+  String email;
+  List roles;
+  String tokenType;
 
-  User.map(dynamic obj) {
-    this._username = obj["username"];
-    this._password = obj["password"];
+  String getUsername(){
+    return this.username;
+  }
+  User({
+    this.id,
+    this.username,
+    this.jwtToken,
+    this.email,
+    this.roles,
+    this.tokenType}
+    );
+// konversi map ke class model
+  factory User.fromJson(Map<String, dynamic> json) {
+      return User(
+        id: json['id'],
+        username: json['username'],
+        jwtToken: json['accessToken'],
+        email:json['email'],
+        roles:json['roles'],
+        tokenType: json['tokenType']
+      );
+    }
+// class model ke ma
+  Map<String, dynamic> toJson(){
+    return {
+      "id":id,
+      "username":username,
+      "accessToken":jwtToken,
+      "email":email,
+      "roles":roles,
+      "tokenType":tokenType
+
+    };
   }
 
-  String get username => _username;
-  String get password => _password;
+  // @override
+  // String toString() {
+  //   return 'User{id: $id,username: $username,accessToken: $jwtToken,email: $email,roles: $roles,tokenType: $tokenType}';
+  // }
+//json ke class model
 
-  Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
-    map["username"] = _username;
-    map["password"] = _password;
-
-    return map;
-  }
 }
+
+  List<User> userFromJson (String jsonData){
+    final data = json.decode(jsonData);
+    return List<User>.from(data.map((item)=>User.fromJson(item)));
+ 
+  }
+  
+  // model ke json
+  String userToJson(User user){
+    final jsonData = user.toJson();
+    return json.encode(jsonData);
+  }
