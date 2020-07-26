@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+//import org.springframework.security.config.annotation.web.configuration;
 
 import com.dev.wellness.security.jwt.AuthEntryPointJwt;
 import com.dev.wellness.security.jwt.AuthTokenFilter;
@@ -30,7 +31,7 @@ import com.dev.wellness.security.oauth2.OAuth2AuthenticationSuccessHandler;
 		securedEnabled = true,
 		jsr250Enabled = true,
 		prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	private final long MAX_AGE_SECS = 3600;
 
 	@Autowired

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dev.wellness.models.ERole;
 import com.dev.wellness.models.Role;
 import com.dev.wellness.models.User;
+import com.dev.wellness.models.Provider;
 import com.dev.wellness.models.AuthProvider;
 import com.dev.wellness.payload.request.LoginRequest;
 import com.dev.wellness.payload.request.SignupRequest;
@@ -30,17 +31,25 @@ import com.dev.wellness.payload.response.JwtResponse;
 import com.dev.wellness.payload.response.MessageResponse;
 import com.dev.wellness.repository.RoleRepository;
 import com.dev.wellness.repository.UserRepository;
+import com.dev.wellness.repository.ProviderRepository;
 import com.dev.wellness.security.jwt.JwtUtils;
 import com.dev.wellness.security.services.UserDetailsImpl;
 
 import javax.validation.Valid;
 import java.net.URI;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	
+	//private final String LOCAL_ID = "9999_ " + timestamp.getTime();
+	private final String LOCAL_ID = "9999";
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -49,6 +58,10 @@ public class AuthController {
 
 	@Autowired
 	RoleRepository roleRepository;
+
+	@Autowired
+	ProviderRepository providerRepository;
+
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -98,6 +111,9 @@ public class AuthController {
 							 encoder.encode(signUpRequest.getPassword()));
 
 		user.setProvider(AuthProvider.local);
+		Provider provider = new Provider(AuthProvider.local);
+		provider.setProviderId(LOCAL_ID);
+
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -124,6 +140,7 @@ public class AuthController {
 
 		user.setRoles(roles);
 		userRepository.save(user);
+		providerRepository.save(provider);
 		// URI location = ServletUriComponentsBuilder
 		// .fromCurrentContextPath().path("/user/me")
 		// .buildAndExpand(result.getId()).toUri();

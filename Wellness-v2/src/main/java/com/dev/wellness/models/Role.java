@@ -1,6 +1,8 @@
 package com.dev.wellness.models;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "roles")
@@ -12,6 +14,18 @@ public class Role {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
 	private ERole name;
+
+
+
+	// @CreatedDate
+	// @Temporal(TemporalType.TIMESTAMP)
+	// @Column(name = "create_date")
+	// private Date createDate;
+
+	// @LastModifiedDate
+	// @Temporal(TemporalType.TIMESTAMP)
+	// @Column(name = "updated_date")
+	// private Date modifyDate;
 
 	public Role() {
 

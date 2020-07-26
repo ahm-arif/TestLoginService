@@ -5,8 +5,10 @@ import com.dev.wellness.models.AuthProvider;
 import com.dev.wellness.models.User;
 import com.dev.wellness.models.Role;
 import com.dev.wellness.models.ERole;
+import com.dev.wellness.models.Provider;
 import com.dev.wellness.repository.UserRepository;
 import com.dev.wellness.repository.RoleRepository;
+import com.dev.wellness.repository.ProviderRepository;
 import com.dev.wellness.security.services.UserDetailsImpl;
 import com.dev.wellness.security.oauth2.user.OAuth2UserInfo;
 import com.dev.wellness.security.oauth2.user.OAuth2UserInfoFactory;
@@ -32,6 +34,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
 	RoleRepository roleRepository;
+
+    @Autowired
+	ProviderRepository providerRepository;
+
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -74,7 +80,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
         
         User user = new User();
-
+        Provider provider = new Provider();
 
 		Set<Role> roles = new HashSet<>();
 
@@ -82,13 +88,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         roles.add(adminRole);
-
-        user.setProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+        
+        AuthProvider whichProvider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId());
+        user.setProvider(whichProvider);
         user.setProviderId(oAuth2UserInfo.getId());
         user.setUsername(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
         user.setRoles(roles);
+
+        provider.setProviderId(oAuth2UserInfo.getId());
+        provider.setName(whichProvider);
+
+        providerRepository.save(provider);
+
         return userRepository.save(user);
     }
 

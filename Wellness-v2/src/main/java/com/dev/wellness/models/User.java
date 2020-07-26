@@ -133,7 +133,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 //     }
 // }
 @Entity
-@Table(	name = "users", 
+@Table(	name = "appuser", 
 		uniqueConstraints = { 
 			@UniqueConstraint(columnNames = "username"),
 			@UniqueConstraint(columnNames = "email") 
@@ -178,9 +178,9 @@ public class User {
     private String providerId;
 
 
-@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(	name = "user_roles", 
-				joinColumns = @JoinColumn(name = "user_id"), 
+@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name = "role_appuser", 
+				joinColumns = @JoinColumn(name = "appuser_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 
 	private Set<Role> roles = new HashSet<>();
